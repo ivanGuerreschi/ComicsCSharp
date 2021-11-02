@@ -1,2 +1,2 @@
 # ComicsCSharp
- C# Comics Manager
+C# Comics Manager
