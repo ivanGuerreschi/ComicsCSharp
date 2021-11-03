@@ -14,4 +14,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ComicsCSharp.  If not, see <http://www.gnu.org/licenses/>. */
 
-Console.WriteLine("Hello Comics C#");
+using System;
+
+Console.WriteLine("ComicsCSharp");
+
+Console.WriteLine("Enter Name Comics");
+var name = Console.ReadLine();
+
+Console.WriteLine("Enter Title Comics");
+var title = Console.ReadLine();
+
+Console.WriteLine("Enter Number Comics");
+var number = Int32.Parse(Console.ReadLine());
+
+Console.WriteLine("Enter Date Comics");
+var date = Console.ReadLine();
+
+var comics = new Comics(name, title, number, DateOnly.ParseExact(date, "d"));
+Console.WriteLine($"Name: {comics.Name} Title: {comics.Title} Number: {comics.Number} Date: {comics.Date}");
+
+record Comics(String Name, String Title, int Number, DateOnly Date) { }
