@@ -15,22 +15,92 @@ You should have received a copy of the GNU General Public License
 along with ComicsCSharp.  If not, see <http://www.gnu.org/licenses/>. */
 
 using System;
+using System.IO;
 
 Console.WriteLine("ComicsCSharp");
 
-Console.WriteLine("Enter Name Comics");
-var name = Console.ReadLine();
+var loop = true;
 
-Console.WriteLine("Enter Title Comics");
-var title = Console.ReadLine();
+do
+{
+    Console.WriteLine(Menu());
+    var input = Console.ReadLine();
 
-Console.WriteLine("Enter Number Comics");
-var number = Int32.Parse(Console.ReadLine());
+    switch (input)
+    {
+        case "p":
+            Print();
+            continue;
 
-Console.WriteLine("Enter Date Comics");
-var date = Console.ReadLine();
+        case "i":
+            Input();
+            continue;
 
-var comics = new Comics(name, title, number, DateOnly.ParseExact(date, "d"));
-Console.WriteLine($"Name: {comics.Name} Title: {comics.Title} Number: {comics.Number} Date: {comics.Date}");
+        case "s":
+            Search();
+            continue;
 
-record Comics(String Name, String Title, int Number, DateOnly Date) { }
+        case "q":
+            loop = false;
+            break;
+    }
+} while (loop);
+
+String Menu()
+{
+    return @"
+[p] Print all Comics
+[i] Enter Comics
+[s] Search Commics
+[q] Quit";
+}
+void Input()
+{
+    Console.WriteLine("Enter Name Comics");
+    var name = Console.ReadLine();
+
+    Console.WriteLine("Enter Title Comics");
+    var title = Console.ReadLine();
+
+    Console.WriteLine("Enter Number Comics");
+    var number = Console.ReadLine();
+
+    Console.WriteLine("Enter Date Comics");
+    var date = Console.ReadLine();
+
+    using (StreamWriter sw = new StreamWriter(
+        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt",
+        true))
+    {
+        sw.WriteLine($"{name}:{title}:{number}:{date}");
+        sw.Close();
+    }
+}
+
+void Print()
+{
+    using (var sr = new StreamReader(
+        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt"))
+    {
+        var stringRead = "";
+        while ((stringRead = sr.ReadLine()) != null)
+            Console.WriteLine(stringRead);
+        sr.Close();
+    }
+}
+
+void Search()
+{
+    Console.WriteLine("Enter key search");
+    var keySearch = Console.ReadLine();
+
+    using (var sr = new StreamReader(
+        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt"))
+    {
+        var stringRead = "";
+        while ((stringRead = sr.ReadLine()) != null)
+            if (stringRead.Contains(keySearch))
+                Console.WriteLine(stringRead);
+        sr.Close();
+    }
+}
