@@ -20,7 +20,7 @@ using System.IO;
 Console.WriteLine("ComicsCSharp");
 
 var loop = true;
-var path = @"C:\Users\ivang\Documents\Development\C#\ComicsCSharp\Comics.txt";
+const String path = @"C:\Users\ivang\Documents\Development\C#\ComicsCSharp\Comics.txt";
 
 do
 {
@@ -45,6 +45,10 @@ do
             Delete();
             continue;
 
+        case "t":
+            Sort();
+            continue;
+
         case "q":
             loop = false;
             break;
@@ -58,6 +62,7 @@ String Menu()
 [i] Enter Comics
 [s] Search Comics
 [d] Delete Comics
+[t] Sort Comics
 [q] Quit";
 }
 void Input()
@@ -94,6 +99,9 @@ void Search()
 {
     Console.WriteLine("Enter key search");
     var keySearch = Console.ReadLine();
+    
+    if (keySearch == null)
+        keySearch = "";
 
     using (var sr = new StreamReader(path))
     {
@@ -118,5 +126,12 @@ void Delete()
 void RemoveBlankLine()
 {
     var lines = File.ReadAllLines(path).Where(line => !string.IsNullOrWhiteSpace(line));
+    File.WriteAllLines(path, lines);
+}
+
+void Sort()
+{
+    List<String> lines = new List<String>(File.ReadAllLines(path));
+    lines.Sort();
     File.WriteAllLines(path, lines);
 }
