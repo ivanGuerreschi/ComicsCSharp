@@ -20,6 +20,7 @@ using System.IO;
 Console.WriteLine("ComicsCSharp");
 
 var loop = true;
+var path = @"C:\Users\ivang\Documents\Development\C#\ComicsCSharp\Comics.txt";
 
 do
 {
@@ -40,6 +41,10 @@ do
             Search();
             continue;
 
+        case "d":
+            Delete();
+            continue;
+
         case "q":
             loop = false;
             break;
@@ -51,40 +56,36 @@ String Menu()
     return @"
 [p] Print all Comics
 [i] Enter Comics
-[s] Search Commics
+[s] Search Comics
+[d] Delete Comics
 [q] Quit";
 }
 void Input()
 {
+    Console.WriteLine("Enter Number Comics");
+    var number = Console.ReadLine();
+
     Console.WriteLine("Enter Name Comics");
     var name = Console.ReadLine();
 
     Console.WriteLine("Enter Title Comics");
     var title = Console.ReadLine();
 
-    Console.WriteLine("Enter Number Comics");
-    var number = Console.ReadLine();
-
     Console.WriteLine("Enter Date Comics");
     var date = Console.ReadLine();
 
-    using (StreamWriter sw = new StreamWriter(
-        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt",
-        true))
+    using (StreamWriter sw = new StreamWriter(path, true))
     {
-        sw.WriteLine($"{name}:{title}:{number}:{date}");
+        sw.WriteLine($"{number}:{name}:{title}:{date}");
         sw.Close();
     }
 }
 
 void Print()
 {
-    using (var sr = new StreamReader(
-        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt"))
+    using (var sr = new StreamReader(path))
     {
-        var stringRead = "";
-        while ((stringRead = sr.ReadLine()) != null)
-            Console.WriteLine(stringRead);
+        Console.WriteLine(sr.ReadToEnd());
         sr.Close();
     }
 }
@@ -94,13 +95,28 @@ void Search()
     Console.WriteLine("Enter key search");
     var keySearch = Console.ReadLine();
 
-    using (var sr = new StreamReader(
-        "C:\\Users\\ivang\\Documents\\Development\\C#\\ComicsCSharp\\Test.txt"))
+    using (var sr = new StreamReader(path))
     {
-        var stringRead = "";
-        while ((stringRead = sr.ReadLine()) != null)
-            if (stringRead.Contains(keySearch))
-                Console.WriteLine(stringRead);
+        var stringRead = sr.ReadToEnd();
+        if (stringRead.Contains(keySearch))
+            Console.WriteLine(stringRead);
         sr.Close();
     }
+}
+
+void Delete()
+{
+    Console.WriteLine("Enter key search");
+    var keyDelete = Console.ReadLine();
+
+    var oldLines = File.ReadAllLines(path);
+    var newLines = oldLines.Where(line => !line.Contains(keyDelete + ":"));
+    File.WriteAllLines(path, newLines);
+    RemoveBlankLine();
+}
+
+void RemoveBlankLine()
+{
+    var lines = File.ReadAllLines(path).Where(line => !string.IsNullOrWhiteSpace(line));
+    File.WriteAllLines(path, lines);
 }
