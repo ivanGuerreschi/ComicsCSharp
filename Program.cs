@@ -20,7 +20,7 @@ using System.IO;
 Console.WriteLine("ComicsCSharp");
 
 var loop = true;
-const String path = @"C:\Users\ivang\Documents\Development\C#\ComicsCSharp\Comics.txt";
+const String path = @".\Comics.txt";
 
 do
 {
